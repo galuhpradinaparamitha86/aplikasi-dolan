@@ -336,6 +336,9 @@
 
     const form = document.getElementById("activity-form");
    
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz65lRqxmMNSaiIKJezX8BeCEaddqyPWxQ_0eOvg9e_c8JhSLPra10DWT4HZx1JzMfqsw/exec";
+
+   
 ["activity-class", "literacy", "numeracy", "participants", "obstacles", "followup"].forEach(id => {
   const field = document.getElementById(id);
   if (field) {
@@ -364,6 +367,22 @@
   `Pendongeng: ${value("storyteller")}`,
   `Judul dongeng: ${value("story-title")}`
       ].join("\n\n");
+     
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({
+          tanggal: formattedDate,
+          pendongeng: value("storyteller"),
+          judul: value("story-title")
+        })
+      }).catch(error => {
+        console.error("Pengiriman data DOLAN gagal:", error);
+      });
+
       draftOutput.textContent = draftText;
       draftPanel.classList.remove("hidden");
       status.textContent = "Draf siap. Salin isinya ke Google Form resmi agar data tercatat.";
