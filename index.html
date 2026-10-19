@@ -120,7 +120,7 @@
         </div>
         <div class="sm:col-span-2 flex flex-wrap gap-3"><button data-template-id="draft-button" class="canva-button action" type="submit"></button> <button data-template-id="reset-button" class="canva-button secondary" type="reset"></button>
         </div>
-       </form>
+       <form id="activity-form"...>
       </div>
       <div id="draft-panel" class="hidden surface bg-[#edf3eb] rounded-2xl p-5 md:p-7 mt-5">
        <h2 data-template-id="draft-title" class="canva-text font-semibold"></h2>
@@ -335,6 +335,16 @@
     });
 
     const form = document.getElementById("activity-form");
+   
+["activity-class", "literacy", "numeracy", "participants", "obstacles", "followup"].forEach(id => {
+  const field = document.getElementById(id);
+  if (field) {
+    field.required = false;
+    const wrapper = field.closest("div");
+    if (wrapper) wrapper.style.display = "none";
+  }
+});
+   
     const draftPanel = document.getElementById("draft-panel");
     const draftOutput = document.getElementById("draft-output");
     let draftText = "";
@@ -348,16 +358,11 @@
         ? value("activity-date")
         : new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(date);
       draftText = [
-        "CATATAN KEGIATAN DOLAN — DRAF, BELUM DIKIRIM",
-        `Tanggal: ${formattedDate}`,
-        `Kelas: ${value("activity-class")}`,
-        `Pendongeng: ${value("storyteller")}`,
-        `Judul dongeng: ${value("story-title")}`,
-        `Aktivitas literasi: ${value("literacy")}`,
-        `Aktivitas numerasi: ${value("numeracy")}`,
-        `Jumlah peserta: ${value("participants")}`,
-        `Kendala: ${value("obstacles") || "Tidak dicatat"}`,
-        `Tindak lanjut: ${value("followup") || "Tidak dicatat"}`
+draftText = [
+  "CATATAN KEGIATAN DOLAN",
+  `Tanggal: ${formattedDate}`,
+  `Pendongeng: ${value("storyteller")}`,
+  `Judul dongeng: ${value("story-title")}`
       ].join("\n\n");
       draftOutput.textContent = draftText;
       draftPanel.classList.remove("hidden");
