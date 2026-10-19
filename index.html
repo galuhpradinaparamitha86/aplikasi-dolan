@@ -521,6 +521,17 @@ document.querySelectorAll("[data-template-id]").forEach(el => {
 });
 
 if (window.lucide) window.lucide.createIcons();
+ 
+document.querySelectorAll('[data-service="library"]').forEach(button => {
+  button.addEventListener("click", () => {
+    window.open(
+      "https://drive.google.com/drive/folders/1Ok-Mhs6M1c-EUbvwFl2r3VLsnZXiO_W6?usp=drive_link",
+      "_blank",
+      "noopener,noreferrer"
+    );
+  });
+});
+
 </script>
  </body>
 </html>
