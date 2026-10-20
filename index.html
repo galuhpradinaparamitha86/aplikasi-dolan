@@ -105,6 +105,20 @@
 </div>
 
       <div class="grid lg:grid-cols-2 gap-5 mt-6">
+       
+<section class="mt-6 rounded-2xl bg-white p-6 shadow-sm border border-slate-100">
+  <div class="flex items-center gap-3 mb-4">
+    <i data-lucide="book-open" aria-hidden="true"></i>
+    <h2 class="text-lg font-semibold text-slate-800">Riwayat Kegiatan DOLAN</h2>
+  </div>
+  <p class="text-sm text-slate-500 mb-4">
+    Daftar kegiatan yang tercatat melalui aplikasi DOLAN MONITOR.
+  </p>
+  <div id="dashboard-history" class="space-y-3">
+    <p class="text-sm text-slate-500">Memuat riwayat kegiatan...</p>
+  </div>
+</section>
+
        <article data-template-id="schedule-panel" class="canva-card surface bg-white rounded-2xl p-6">
         <div class="flex items-center gap-3 mb-4">
          <i data-lucide="calendar-days" aria-hidden="true"></i>
@@ -375,6 +389,34 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz65lRqxmMNSa
 
   
 function tampilkanRingkasanDOLAN(data) {
+ 
+function tampilkanRiwayatDOLAN(data) {
+  const riwayatEl = document.getElementById("dashboard-history");
+  if (!riwayatEl) return;
+
+  const kegiatan = data && data.success ? (data.kegiatan || []) : [];
+
+  if (kegiatan.length === 0) {
+    riwayatEl.innerHTML =
+      '<p class="text-sm text-slate-500">Belum ada kegiatan DOLAN yang tercatat.</p>';
+    return;
+  }
+
+  riwayatEl.innerHTML = kegiatan.slice().reverse().map(item => {
+    const tanggal = item.tanggal || "Tanggal belum diisi";
+    const pendongeng = item.pendongeng || "Pendongeng belum diisi";
+    const judul = item.judul || "Tanpa judul";
+
+    return `
+      <article class="rounded-xl border border-slate-100 p-4">
+        <p class="text-xs text-slate-500">${tanggal}</p>
+        <h3 class="font-semibold text-slate-800 mt-1">${judul}</h3>
+        <p class="text-sm text-slate-600 mt-1">Pendongeng: ${pendongeng}</p>
+      </article>
+    `;
+  }).join("");
+}
+
   if (!data || !data.success) return;
 
   const totalEl = document.getElementById("dashboard-total");
@@ -402,6 +444,7 @@ function tampilkanRingkasanDOLAN(data) {
       ? (kegiatan[kegiatan.length - 1].judul || "Tanpa judul")
       : "Belum ada data";
   }
+   tampilkanRiwayatDOLAN(data);
 }
 
 function muatRingkasanDOLAN() {
