@@ -373,7 +373,52 @@
    
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz65lRqxmMNSaiIKJezX8BeCEaddqyPWxQ_0eOvg9e_c8JhSLPra10DWT4HZx1JzMfqsw/exec";
 
-   
+  
+function tampilkanRingkasanDOLAN(data) {
+  if (!data || !data.success) return;
+
+  const totalEl = document.getElementById("dashboard-total");
+  const storytellersEl = document.getElementById("dashboard-storytellers");
+  const latestEl = document.getElementById("dashboard-latest");
+
+  if (totalEl) {
+    totalEl.textContent = data.total || 0;
+  }
+
+  if (storytellersEl) {
+    const daftarPendongeng = [
+      ...new Set(
+        (data.kegiatan || [])
+          .map(item => String(item.pendongeng || "").trim())
+          .filter(Boolean)
+      )
+    ];
+    storytellersEl.textContent = daftarPendongeng.length;
+  }
+
+  if (latestEl) {
+    const kegiatan = data.kegiatan || [];
+    latestEl.textContent = kegiatan.length
+      ? (kegiatan[kegiatan.length - 1].judul || "Tanpa judul")
+      : "Belum ada data";
+  }
+}
+
+function muatRingkasanDOLAN() {
+  const callbackName = "tampilkanRingkasanDOLAN";
+  const script = document.createElement("script");
+  script.src = GOOGLE_SCRIPT_URL
+    + "?callback=" + callbackName
+    + "&t=" + Date.now();
+  script.onerror = function() {
+    console.error("Data dashboard DOLAN gagal dimuat.");
+    script.remove();
+  };
+  document.body.appendChild(script);
+}
+
+muatRingkasanDOLAN();
+ 
 ["activity-class", "literacy", "numeracy", "participants", "obstacles", "followup"].forEach(id => {
   const field = document.getElementById(id);
   if (field) {
