@@ -421,13 +421,12 @@ function tampilkanRiwayatDOLAN(data) {
     storytellersEl.textContent = daftarPendongeng.length;
   }
 
-  if (latestEl) {
-    const kegiatan = data.kegiatan || [];
-    latestEl.textContent = kegiatan.length
-      ? (kegiatan[kegiatan.length - 1].judul || "Tanpa judul")
-      : "Belum ada data";
-  }
-   tampilkanRiwayatDOLAN(data);
+ 
+if (latestEl) {
+  const kegiatan = data.kegiatan || [];
+  latestEl.textContent = kegiatan.length
+    ? (kegiatan[0].judul || "Tanpa judul")
+    : "Belum ada data";
 }
 
 function muatRingkasanDOLAN() {
