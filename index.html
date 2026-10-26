@@ -740,7 +740,8 @@ muatRingkasanDOLAN();
     });
 
 
-   document.getElementById("monitoring-form").addEventListener("submit", async function(event) {
+window.addEventListener("load", function() {
+  document.getElementById("monitoring-form").addEventListener("submit", async function(event) {
   event.preventDefault();
 
   const statusMonitoring = document.getElementById("monitor-status");
@@ -777,10 +778,12 @@ muatRingkasanDOLAN();
     console.error("Pengiriman monitoring gagal:", error);
     statusMonitoring.textContent =
       "Pengiriman gagal. Periksa koneksi internet lalu coba kembali.";
-  } finally {
+   } finally {
     tombol.disabled = false;
   }
-});    if (window.lucide) lucide.createIcons();
+  });
+});
+if (window.lucide) lucide.createIcons();
   </script>
 
 <script>
