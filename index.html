@@ -420,7 +420,16 @@ function tampilkanRiwayatDOLAN(data) {
   }
 
   riwayatEl.innerHTML = kegiatan.map(item => {
-    const tanggal = item.tanggal || "Tanggal belum diisi";
+    
+const tanggal = item.tanggal
+  ? new Intl.DateTimeFormat("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      timeZone: "Asia/Makassar"
+    }).format(new Date(item.tanggal))
+  : "Tanggal belum diisi";
+
     const pendongeng = item.pendongeng || "Pendongeng belum diisi";
     const judul = item.judul || "Tanpa judul";
 
