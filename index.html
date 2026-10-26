@@ -371,13 +371,47 @@
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz65lRqxmMNSaiIKJezX8BeCEaddqyPWxQ_0eOvg9e_c8JhSLPra10DWT4HZx1JzMfqsw/exec";
 
   
+
 function tampilkanRingkasanDOLAN(data) {
- 
+  if (!data || !data.success) return;
+
+  const totalEl = document.getElementById("dashboard-total");
+  const storytellersEl = document.getElementById("dashboard-storytellers");
+  const latestEl = document.getElementById("dashboard-latest");
+
+  const kegiatan = Array.isArray(data.kegiatan) ? data.kegiatan : [];
+
+  if (totalEl) {
+    totalEl.textContent = data.total || 0;
+  }
+
+  if (storytellersEl) {
+    const daftarPendongeng = [
+      ...new Set(
+        kegiatan
+          .map(item => String(item.pendongeng || "").trim())
+          .filter(Boolean)
+      )
+    ];
+    storytellersEl.textContent = daftarPendongeng.length;
+  }
+
+  if (latestEl) {
+    latestEl.textContent = kegiatan.length
+      ? (kegiatan[0].judul || "Tanpa judul")
+      : "Belum ada data";
+  }
+
+  tampilkanRiwayatDOLAN(data);
+}
+
 function tampilkanRiwayatDOLAN(data) {
   const riwayatEl = document.getElementById("dashboard-history");
   if (!riwayatEl) return;
 
-  const kegiatan = data && data.success ? (data.kegiatan || []) : [];
+  const kegiatan = data && data.success && Array.isArray(data.kegiatan)
+    ? data.kegiatan
+    : [];
 
   if (kegiatan.length === 0) {
     riwayatEl.innerHTML =
@@ -385,7 +419,7 @@ function tampilkanRiwayatDOLAN(data) {
     return;
   }
 
-  riwayatEl.innerHTML = kegiatan.slice().reverse().map(item => {
+  riwayatEl.innerHTML = kegiatan.map(item => {
     const tanggal = item.tanggal || "Tanggal belum diisi";
     const pendongeng = item.pendongeng || "Pendongeng belum diisi";
     const judul = item.judul || "Tanpa judul";
@@ -400,45 +434,19 @@ function tampilkanRiwayatDOLAN(data) {
   }).join("");
 }
 
-  if (!data || !data.success) return;
-
-  const totalEl = document.getElementById("dashboard-total");
-  const storytellersEl = document.getElementById("dashboard-storytellers");
-  const latestEl = document.getElementById("dashboard-latest");
-
-  if (totalEl) {
-    totalEl.textContent = data.total || 0;
-  }
-
-  if (storytellersEl) {
-    const daftarPendongeng = [
-      ...new Set(
-        (data.kegiatan || [])
-          .map(item => String(item.pendongeng || "").trim())
-          .filter(Boolean)
-      )
-    ];
-    storytellersEl.textContent = daftarPendongeng.length;
-  }
-
- 
-if (latestEl) {
-  const kegiatan = data.kegiatan || [];
-  latestEl.textContent = kegiatan.length
-    ? (kegiatan[0].judul || "Tanpa judul")
-    : "Belum ada data";
-}
-
 function muatRingkasanDOLAN() {
   const callbackName = "tampilkanRingkasanDOLAN";
   const script = document.createElement("script");
+
   script.src = GOOGLE_SCRIPT_URL
     + "?callback=" + callbackName
     + "&t=" + Date.now();
+
   script.onerror = function() {
     console.error("Data dashboard DOLAN gagal dimuat.");
     script.remove();
   };
+
   document.body.appendChild(script);
 }
 
