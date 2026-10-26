@@ -408,7 +408,39 @@ svg {
         <h2 data-template-id="monitor-head-4" class="canva-text font-semibold"></h2>
         <p data-template-id="monitor-body-4" class="canva-text mt-2"></p>
        </article>
-      </div><button class="service-link action mt-6" type="button" data-service="monitoring"><span data-template-id="monitor-link" class="canva-text"></span></button>
+      </div><form id="monitoring-form" class="surface bg-white rounded-2xl p-6 mt-6">
+  <h2 class="font-semibold mb-4">Formulir Monitoring dan Evaluasi</h2>
+
+  <label for="monitor-tanggal">Tanggal</label>
+  <input id="monitor-tanggal" type="date" required class="w-full p-3 border rounded-xl mb-4">
+
+  <label for="monitor-kelas">Kelas</label>
+  <select id="monitor-kelas" required class="w-full p-3 border rounded-xl mb-4">
+    <option value="">Pilih kelas</option>
+    <option>Kelas 1</option>
+    <option>Kelas 2</option>
+    <option>Kelas 3</option>
+    <option>Kelas 4</option>
+    <option>Kelas 5</option>
+    <option>Kelas 6</option>
+  </select>
+
+  <label for="monitor-pendongeng">Nama Pendongeng</label>
+  <input id="monitor-pendongeng" type="text" required class="w-full p-3 border rounded-xl mb-4" placeholder="Nama pendongeng">
+
+  <label for="monitor-hasil">Hasil Kegiatan</label>
+  <textarea id="monitor-hasil" required class="w-full p-3 border rounded-xl mb-4" placeholder="Apa hasil kegiatan DOLAN?"></textarea>
+
+  <label for="monitor-kendala">Kendala</label>
+  <textarea id="monitor-kendala" class="w-full p-3 border rounded-xl mb-4" placeholder="Tuliskan kendala jika ada"></textarea>
+
+  <label for="monitor-tindak-lanjut">Tindak Lanjut</label>
+  <textarea id="monitor-tindak-lanjut" required class="w-full p-3 border rounded-xl mb-4" placeholder="Apa perbaikan berikutnya?"></textarea>
+
+  <button type="submit" class="service-link action mt-4">Simpan Monitoring</button>
+  <p id="monitor-status" class="mt-3" role="status"></p>
+</form>
+button class="service-link action mt-6" type="button" data-service="monitoring"><span data-template-id="monitor-link" class="canva-text"></span></button>
      </section>
      <section id="prestasi" class="page" aria-labelledby="achievements-title"><span data-template-id="achievements-eyebrow" class="canva-tag pill text-sm font-bold"></span>
       <h1 id="achievements-title" data-template-id="achievements-title" class="canva-text font-semibold mt-5"></h1>
@@ -705,7 +737,48 @@ muatRingkasanDOLAN();
       status.textContent = "Draf diunduh sebagai berkas teks; belum dikirim ke sekolah.";
     });
 
-    if (window.lucide) lucide.createIcons();
+
+   document.getElementById("monitoring-form").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const statusMonitoring = document.getElementById("monitor-status");
+  const tombol = this.querySelector('button[type="submit"]');
+
+  const dataMonitoring = {
+    jenis: "monitoring",
+    tanggal: document.getElementById("monitor-tanggal").value,
+    kelas: document.getElementById("monitor-kelas").value,
+    pendongeng: document.getElementById("monitor-pendongeng").value.trim(),
+    hasil: document.getElementById("monitor-hasil").value.trim(),
+    kendala: document.getElementById("monitor-kendala").value.trim(),
+    tindakLanjut: document.getElementById("monitor-tindak-lanjut").value.trim()
+  };
+
+  tombol.disabled = true;
+  statusMonitoring.textContent = "Mengirim data monitoring...";
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(dataMonitoring)
+    });
+
+    statusMonitoring.textContent =
+      "Permintaan pengiriman selesai. Silakan periksa Google Sheets untuk memastikan data tersimpan.";
+
+    this.reset();
+  } catch (error) {
+    console.error("Pengiriman monitoring gagal:", error);
+    statusMonitoring.textContent =
+      "Pengiriman gagal. Periksa koneksi internet lalu coba kembali.";
+  } finally {
+    tombol.disabled = false;
+  }
+});    if (window.lucide) lucide.createIcons();
   </script>
 
 <script>
