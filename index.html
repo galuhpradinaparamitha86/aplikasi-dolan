@@ -279,6 +279,11 @@ svg {
          <h2 data-template-id="schedule-title" class="canva-text font-semibold"></h2>
         </div>
         <p data-template-id="schedule-empty" class="canva-text leading-relaxed"></p><button type="button" class="service-link secondary mt-5" data-service="schedule"><span data-template-id="schedule-link" class="canva-text"></span></button>
+    <div id="dashboard-schedule" class="space-y-3 mt-4">
+  <p class="text-sm text-slate-500">
+    Memuat jadwal DOLAN...
+  </p>
+</div>
        </article>
        <article data-template-id="news-panel" class="canva-card surface bg-white rounded-2xl p-6">
         <div class="flex items-center gap-3 mb-4">
@@ -657,8 +662,63 @@ function muatRingkasanDOLAN() {
 }
 
 muatRingkasanDOLAN();
- 
-["activity-class", "literacy", "numeracy", "participants", "obstacles", "followup"].forEach(id => {
+ function tampilkanJadwalDOLAN(data) {
+  const jadwalEl = document.getElementById("dashboard-schedule");
+
+  if (!jadwalEl) return;
+
+  if (!data || !data.success || !Array.isArray(data.jadwal)) {
+    jadwalEl.innerHTML =
+      '<p class="text-sm text-red-600">Jadwal belum dapat dimuat.</p>';
+    return;
+  }
+
+  if (data.jadwal.length === 0) {
+    jadwalEl.innerHTML =
+      '<p class="text-sm text-slate-500">Belum ada jadwal DOLAN. Silakan tambahkan jadwal terlebih dahulu.</p>';
+    return;
+  }
+
+  jadwalEl.innerHTML = data.jadwal.map(item => {
+    const tanggal = item.tanggal || "Tanggal belum diisi";
+    const kelas = item.kelas || "Kelas belum ditentukan";
+    const pendongeng = item.pendongeng || "Belum ditentukan";
+    const judul = item.judul || "Judul belum ditentukan";
+    const status = item.status || "Direncanakan";
+
+    return `
+      <article class="rounded-xl border border-slate-200 p-4">
+        <p class="text-xs text-slate-500">${tanggal}</p>
+        <h3 class="font-semibold text-slate-800 mt-1">${judul}</h3>
+        <p class="text-sm text-slate-600 mt-1">Kelas: ${kelas}</p>
+        <p class="text-sm text-slate-600">Pendongeng: ${pendongeng}</p>
+        <p class="text-xs text-emerald-700 mt-2">Status: ${status}</p>
+      </article>
+    `;
+  }).join("");
+}
+
+function muatJadwalDOLAN() {
+  const script = document.createElement("script");
+
+  script.src = GOOGLE_SCRIPT_URL
+    + "?jenis=jadwal&callback=tampilkanJadwalDOLAN"
+    + "&t=" + Date.now();
+
+  script.onerror = function() {
+    const jadwalEl = document.getElementById("dashboard-schedule");
+    if (jadwalEl) {
+      jadwalEl.innerHTML =
+        '<p class="text-sm text-red-600">Gagal memuat jadwal DOLAN.</p>';
+    }
+    script.remove();
+  };
+
+  document.body.appendChild(script);
+}
+
+muatJadwalDOLAN();
+   ["activity-class", "literacy", "numeracy", "participants", "obstacles", "followup"].forEach(id => {
   const field = document.getElementById(id);
   if (field) {
     field.required = false;
