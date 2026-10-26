@@ -115,6 +115,93 @@ svg {
   }
 }
 
+/* ===== DESAIN KHUSUS MONITORING DAN EVALUASI ===== */
+
+#monitoring {
+  color: #30483a;
+}
+
+#monitoring h1 {
+  color: #365b46;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+}
+
+#monitoring > p {
+  color: #6b7d72;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+#monitoring .grid {
+  gap: 1.25rem;
+}
+
+#monitoring article {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e0ebe2;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 20px rgba(55, 86, 65, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#monitoring article:nth-child(1) {
+  border-top: 4px solid #8eae99;
+  background: linear-gradient(145deg, #ffffff, #f0f6f1);
+}
+
+#monitoring article:nth-child(2) {
+  border-top: 4px solid #a8cbe5;
+  background: linear-gradient(145deg, #ffffff, #f0f7fc);
+}
+
+#monitoring article:nth-child(3) {
+  border-top: 4px solid #f0d77c;
+  background: linear-gradient(145deg, #ffffff, #fffaf0);
+}
+
+#monitoring article:nth-child(4) {
+  border-top: 4px solid #b5c8b9;
+  background: linear-gradient(145deg, #ffffff, #f3f6f3);
+}
+
+#monitoring article h2 {
+  color: #365b46;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+#monitoring article p {
+  color: #64766b;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+#monitoring button[data-service="monitoring"] {
+  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
+  font-weight: 600;
+}
+
+@media (hover: hover) {
+  #monitoring article:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(55, 86, 65, 0.10);
+  }
+}
+
+@media (max-width: 640px) {
+  #monitoring article {
+    padding: 1.2rem;
+    border-radius: 16px;
+  }
+}
+
   </style>
   <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js" type="text/javascript"></script>
