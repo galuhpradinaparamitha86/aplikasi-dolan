@@ -770,8 +770,7 @@ document.addEventListener("submit", async function(event) {
     });
 
     statusMonitoring.textContent =
-      "Permintaan pengiriman selesai. Silakan periksa Google Sheets untuk memastikan data tersimpan.";
-
+  "Data monitoring berhasil dikirim. Formulir siap untuk pengisian berikutnya.";
   event.target.reset();
   } catch (error) {
     console.error("Pengiriman monitoring gagal:", error);
