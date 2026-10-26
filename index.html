@@ -740,13 +740,12 @@ muatRingkasanDOLAN();
     });
 
 
-window.addEventListener("load", function() {
-  document.getElementById("monitoring-form").addEventListener("submit", async function(event) {
+document.addEventListener("submit", async function(event) {
+  if (!event.target.matches("#monitoring-form")) return;
   event.preventDefault();
 
   const statusMonitoring = document.getElementById("monitor-status");
-  const tombol = this.querySelector('button[type="submit"]');
-
+  const tombol = event.target.querySelector('button[type="submit"]');
   const dataMonitoring = {
     jenis: "monitoring",
     tanggal: document.getElementById("monitor-tanggal").value,
@@ -778,10 +777,9 @@ window.addEventListener("load", function() {
     console.error("Pengiriman monitoring gagal:", error);
     statusMonitoring.textContent =
       "Pengiriman gagal. Periksa koneksi internet lalu coba kembali.";
-   } finally {
+     } finally {
     tombol.disabled = false;
   }
-  });
 });
 if (window.lucide) lucide.createIcons();
   </script>
