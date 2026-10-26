@@ -31,6 +31,90 @@
     .book-spine { width:10px; border-radius:4px; background:#eebd50; }
     @media(max-width:767px) { #site-nav:not(.open) { display:none; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; scroll-behavior:auto!important; transition-duration:.01ms!important; } }
+   
+/* ===== DOLAN MONITOR - DESAIN MODERN ===== */
+:root {
+  --dolan-sage: #8fae9b;
+  --dolan-sage-dark: #476b57;
+  --dolan-sage-light: #edf4ef;
+  --dolan-blue: #e8f2fb;
+  --dolan-blue-dark: #527b9e;
+  --dolan-yellow: #fff1bd;
+  --dolan-white: #ffffff;
+  --dolan-text: #30443a;
+  --dolan-muted: #718078;
+  --dolan-border: #e3ebe5;
+}
+
+body {
+  background: #f5f8f6;
+  color: var(--dolan-text);
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* Kartu dan panel */
+.card,
+.stat-card,
+.dashboard-card,
+.panel,
+.service-card {
+  border: 1px solid var(--dolan-border);
+  border-radius: 18px;
+  box-shadow: 0 5px 18px rgba(54, 82, 64, 0.06);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover,
+.stat-card:hover,
+.dashboard-card:hover,
+.panel:hover,
+.service-card:hover {
+  box-shadow: 0 8px 22px rgba(54, 82, 64, 0.10);
+}
+
+/* Tombol */
+button,
+.button,
+.btn {
+  border-radius: 12px;
+  transition: filter 0.2s ease;
+}
+
+button:hover,
+.button:hover,
+.btn:hover {
+  filter: brightness(0.97);
+}
+
+/* Kolom formulir */
+input,
+select,
+textarea {
+  border-radius: 10px;
+}
+
+/* Panel navigasi */
+.nav-button {
+  border-radius: 12px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Tampilan layar kecil */
+img,
+svg {
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .card,
+  .stat-card,
+  .dashboard-card,
+  .panel,
+  .service-card {
+    border-radius: 14px;
+  }
+}
+
   </style>
   <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js" type="text/javascript"></script>
