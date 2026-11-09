@@ -618,24 +618,12 @@ function tampilkanRingkasanDOLAN(data) {
   if (!data || !data.success) return;
 
   const totalEl = document.getElementById("dashboard-total");
-  const storytellersEl = document.getElementById("dashboard-storytellers");
   const latestEl = document.getElementById("dashboard-latest");
 
   const kegiatan = Array.isArray(data.kegiatan) ? data.kegiatan : [];
 
   if (totalEl) {
     totalEl.textContent = data.total || 0;
-  }
-
-  if (storytellersEl) {
-    const daftarPendongeng = [
-      ...new Set(
-        kegiatan
-          .map(item => String(item.pendongeng || "").trim())
-          .filter(Boolean)
-      )
-    ];
-    storytellersEl.textContent = daftarPendongeng.length;
   }
 
   if (latestEl) {
