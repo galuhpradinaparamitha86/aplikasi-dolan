@@ -614,34 +614,80 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz65lRqxmMNSa
 
   
 
+
 function tampilkanRingkasanDOLAN(data) {
   if (!data || !data.success) return;
 
   const totalEl = document.getElementById("dashboard-total");
   const latestEl = document.getElementById("dashboard-latest");
 
-  const kegiatan = Array.isArray(data.kegiatan) ? data.kegiatan : [];
+  const kegiatan = Array.isArray(data.kegiatan)
+    ? data.kegiatan
+    : [];
+
+  // Urutkan berdasarkan waktu penyimpanan terbaru
+  const kegiatanTerbaru = [...kegiatan].sort((a, b) => {
+    return new Date(b.waktuSimpan).getTime() -
+           new Date(a.waktuSimpan).getTime();
+  });
 
   if (totalEl) {
-    totalEl.textContent = data.total || 0;
+    totalEl.textContent = kegiatan.length;
   }
 
   if (latestEl) {
-    latestEl.textContent = kegiatan.length
-      ? (kegiatan[0].judul || "Tanpa judul")
+    latestEl.textContent = kegiatanTerbaru.length
+      ? (kegiatanTerbaru[0].judul || "Tanpa judul")
       : "Belum ada data";
   }
 
   tampilkanRiwayatDOLAN(data);
 }
 
+
+
+function tampilkanRingkasanDOLAN(data) {
+  if (!data || !data.success) return;
+
+  const totalEl = document.getElementById("dashboard-total");
+  const latestEl = document.getElementById("dashboard-latest");
+
+  const kegiatan = Array.isArray(data.kegiatan)
+    ? data.kegiatan
+    : [];
+
+  // Urutkan berdasarkan waktu penyimpanan terbaru
+  const kegiatanTerbaru = [...kegiatan].sort((a, b) => {
+    return new Date(b.waktuSimpan).getTime() -
+           new Date(a.waktuSimpan).getTime();
+  });
+
+  if (totalEl) {
+    totalEl.textContent = kegiatan.length;
+  }
+
+  if (latestEl) {
+    latestEl.textContent = kegiatanTerbaru.length
+      ? (kegiatanTerbaru[0].judul || "Tanpa judul")
+      : "Belum ada data";
+  }
+
+  // Kirim data yang sudah diurutkan ke riwayat
+  tampilkanRiwayatDOLAN({
+    success: true,
+    kegiatan: kegiatanTerbaru
+  });
+}
+
+
 function tampilkanRiwayatDOLAN(data) {
   const riwayatEl = document.getElementById("dashboard-history");
   if (!riwayatEl) return;
 
-  const kegiatan = data && data.success && Array.isArray(data.kegiatan)
-    ? data.kegiatan
-    : [];
+  const kegiatan = data && data.success &&
+    Array.isArray(data.kegiatan)
+      ? data.kegiatan
+      : [];
 
   if (kegiatan.length === 0) {
     riwayatEl.innerHTML =
@@ -650,15 +696,15 @@ function tampilkanRiwayatDOLAN(data) {
   }
 
   riwayatEl.innerHTML = kegiatan.map(item => {
-    
-const tanggal = item.tanggal
-  ? new Intl.DateTimeFormat("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-      timeZone: "Asia/Makassar"
-    }).format(new Date(item.tanggal))
-  : "Tanggal belum diisi";
+
+    const tanggal = item.tanggal
+      ? new Intl.DateTimeFormat("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+          timeZone: "Asia/Makassar"
+        }).format(new Date(item.tanggal))
+      : "Tanggal belum diisi";
 
     const pendongeng = item.pendongeng || "Pendongeng belum diisi";
     const judul = item.judul || "Tanpa judul";
@@ -667,7 +713,9 @@ const tanggal = item.tanggal
       <article class="rounded-xl border border-slate-100 p-4">
         <p class="text-xs text-slate-500">${tanggal}</p>
         <h3 class="font-semibold text-slate-800 mt-1">${judul}</h3>
-        <p class="text-sm text-slate-600 mt-1">Pendongeng: ${pendongeng}</p>
+        <p class="text-sm text-slate-600 mt-1">
+          Pendongeng: ${pendongeng}
+        </p>
       </article>
     `;
   }).join("");
