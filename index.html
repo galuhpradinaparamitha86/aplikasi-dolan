@@ -1000,7 +1000,52 @@ document.querySelectorAll("[data-template-id]").forEach(el => {
 });
 
 if (window.lucide) window.lucide.createIcons();
- 
+// Memuat foto Galeri DOLAN dari Google Drive
+const galeriContainer = document.querySelector("#prestasi .grid");
+
+if (galeriContainer) {
+  galeriContainer.innerHTML =
+    "<p class='text-sm'>Memuat dokumentasi foto...</p>";
+
+  const scriptGaleri = document.createElement("script");
+  scriptGaleri.src =
+    GOOGLE_SCRIPT_URL + "?jenis=galeri&callback=tampilkanGaleri";
+
+  document.body.appendChild(scriptGaleri);
+}
+
+function tampilkanGaleri(data) {
+  const galeriContainer = document.querySelector("#prestasi .grid");
+  if (!galeriContainer) return;
+
+  galeriContainer.innerHTML = "";
+
+  if (!data.success || !data.foto || data.foto.length === 0) {
+    galeriContainer.innerHTML =
+      "<p>Belum ada dokumentasi foto.</p>";
+    return;
+  }
+
+  data.foto.forEach(foto => {
+    const figure = document.createElement("figure");
+    figure.className = "surface bg-white rounded-2xl p-3";
+
+    const img = document.createElement("img");
+    img.src = foto.url;
+    img.alt = foto.nama;
+    img.loading = "lazy";
+    img.className =
+      "w-full aspect-[4/3] object-cover rounded-xl";
+
+    const caption = document.createElement("figcaption");
+    caption.className = "mt-3 text-sm font-medium";
+    caption.textContent = foto.nama;
+
+    figure.appendChild(img);
+    figure.appendChild(caption);
+    galeriContainer.appendChild(figure);
+  });
+} 
 document.querySelectorAll('[data-service="library"]').forEach(button => {
   button.addEventListener("click", () => {
     window.open(
